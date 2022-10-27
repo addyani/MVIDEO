@@ -3,9 +3,9 @@ package database
 import (
 	"fmt"
 
-	//"gorm.io/driver/sqlite" // Sqlite driver based on GGO
-	//"github.com/glebarez/sqlite" // Pure go SQLite driver, checkout https://github.com/glebarez/sqlite for details
 	"gorm.io/driver/sqlserver"
+	//"github.com/glebarez/sqlite" // Pure go SQLite driver, checkout https://github.com/glebarez/sqlite for details
+	// "gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 )
 

@@ -26,8 +26,11 @@ func main() {
 	models.InitDbModels()
 
 	userController := controllers.InitUserController(store)
-	// videoController := controllers.InitProductController(store)
-	// advertController := controllers.InitCartController(store)
+	videoController := controllers.InitVideoController(store)
+	advertController := controllers.InitAdsController(store)
+
+	ads := app.Group("/ads")
+	ads.Get("/", advertController.Ads)
 
 	user := app.Group("")
 	user.Get("/login", userController.Login)
@@ -38,9 +41,18 @@ func main() {
 	//Untuk testing harus ada user register agar foreignKey relasi user to video dan advert bisa tersambung
 	user.Post("/register", userController.AddRegisteredUser)
 
+	video := app.Group("/videos")
 	// video := app.Group("/videos")
-
+	video.Get("/", videoController.IndexVideo)
+	video.Get("/create", videoController.AddVideo)
+	video.Post("/create", videoController.AddPostedVideo)
+	video.Get("/editvideo/:id", videoController.EditVideo)
+	video.Post("/editvideo/:id", videoController.EditPostedVideo)
+	video.Get("/deletevideo/:id", videoController.DeleteVideo)
+	//thisone
+	video.Get("/detail/:id", videoController.GetViewVideo)
+	
 	// advert := app.Group("/advert")
 
-	app.Listen(":3000")
+	app.Listen(":3001")
 }

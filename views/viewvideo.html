@@ -1,0 +1,38 @@
+{{template "partials/atas" .}}
+<div class="container">
+  <br />
+
+  <div class="p-5 mb-4 bg-light rounded-3">
+    <div>
+      {{range .Videos}}
+      <div class="card shadow-sm">
+        <img src="./public/tumb/{{.Tumb}}" width="100%" height="225" />
+        <div class="card-body">
+          <h5 class="card-text">Judul</h5>
+          <p class="card-text">Nama Creator</p>
+          Views . 25 Tanggal Upload
+        </div>
+      </div>
+      {{end}} &emsp; &emsp; &emsp;
+      <div class="container mb-3">
+        <p><b>Deskripsi Video </b> {{.Tumb}}</p>
+      </div>
+
+      <!-- &emsp; -->
+    </div>
+    <br />
+    <div>
+      <div class="d-grid gap-2 col-6 mx-auto">
+        <a href="/videos" class="btn btn-outline-danger">
+          Kembali ke kategori
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-skip-backward-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path d="M11.729 5.055a.5.5 0 0 0-.52.038L8.5 7.028V5.5a.5.5 0 0 0-.79-.407L5 7.028V5.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0V8.972l2.71 1.935a.5.5 0 0 0 .79-.407V8.972l2.71 1.935A.5.5 0 0 0 12 10.5v-5a.5.5 0 0 0-.271-.445z" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {{template "partials/bawah" .}}
+</div>
