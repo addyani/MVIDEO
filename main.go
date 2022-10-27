@@ -42,13 +42,15 @@ func main() {
 	user.Post("/register", userController.AddRegisteredUser)
 
 	video := app.Group("/videos")
-	video := app.Group("/videos")
+	// video := app.Group("/videos")
 	video.Get("/", videoController.IndexVideo)
 	video.Get("/create", videoController.AddVideo)
 	video.Post("/create", videoController.AddPostedVideo)
 	video.Get("/editvideo/:id", videoController.EditVideo)
 	video.Post("/editvideo/:id", videoController.EditPostedVideo)
 	video.Get("/deletevideo/:id", videoController.DeleteVideo)
+	//thisone
+	video.Get("/detail/:id", videoController.GetViewVideo)
 	
 	// advert := app.Group("/advert")
 

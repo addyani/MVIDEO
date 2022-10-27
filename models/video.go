@@ -56,3 +56,11 @@ func DeleteVideoById(db *gorm.DB, videos *Video, id int)(err error) {
 	
 	return nil
 }
+
+func ReadVideo2ById(db *gorm.DB, viewVideo *[]Video, id int)(err error) {
+	err = db.Where("id=?", id).First(viewVideo).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
