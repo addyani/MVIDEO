@@ -5,11 +5,12 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 
 	"ilmudata/task1/database"
 	"ilmudata/task1/models"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserController struct {
@@ -23,6 +24,14 @@ func InitUserController(s *session.Store) *UserController {
 	return &UserController{Db: db, store: s}
 }
 
+// GET /login
+func (controller *UserController) Login(c *fiber.Ctx) error {
+	return c.Render("login", fiber.Map{
+		"Title": "Login",
+	})
+}
+
+// post /login
 func (controller *UserController) LoginPosted(c *fiber.Ctx) error {
 	sess, err := controller.store.Get(c)
 	if err != nil {
@@ -52,5 +61,64 @@ func (controller *UserController) LoginPosted(c *fiber.Ctx) error {
 		return c.Redirect("/products/" + idn)
 	}
 
+	return c.Redirect("/login")
+}
+
+// /logout
+func (controller *UserController) Logout(c *fiber.Ctx) error {
+
+	sess, err := controller.store.Get(c)
+	if err != nil {
+		panic(err)
+	}
+	sess.Destroy()
+	return c.Render("login", fiber.Map{
+		"Title": "Login",
+	})
+}
+
+func (controller *UserController) AuthVerify(c *fiber.Ctx) error {
+	sess, _ := controller.store.Get(c)
+	val := sess.Get("username")
+	if val != nil {
+		return c.Next()
+	}
+	return c.Redirect("/login")
+}
+
+func (controller *UserController) DashboardUser(c *fiber.Ctx) error {
+	return c.Render("dashboarduser", fiber.Map{
+		"Title": "Dashboard User",
+	})
+}
+
+// POST /register
+func (controller *UserController) AddRegisteredUser(c *fiber.Ctx) error {
+	var user models.User
+
+	if err := c.BodyParser(&user); err != nil {
+		return c.SendStatus(400) // Bad Request, RegisterForm is not complete
+	}
+
+	// Hash password
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+	sHash := string(bytes)
+
+	// Add hash password to db user password
+	user.Password = sHash
+
+	// save user
+	err := models.CreateUser(controller.Db, &user)
+	if err != nil {
+		return c.SendStatus(500) // Server error, gagal menyimpan user
+	}
+
+	// Find user
+	errs := models.FindUserByUsername(controller.Db, &user, user.Username)
+	if errs != nil {
+		return c.SendStatus(500) // Server error, gagal menyimpan user
+	}
+
+	// if succeed
 	return c.Redirect("/login")
 }
