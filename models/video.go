@@ -21,9 +21,10 @@ func CreateVideo(db *gorm.DB, newVideo *Video, userId uint) (err error) {
 		return err
 	}
 	return nil
+}
 
 func ViewVideo(db *gorm.DB, video *Video, id int) (err error) {
-	err = db.Where("user_id=?", id).ind(video).Error
+	err = db.Where("user_id=?", id).Find(video).Error
 	if err != nil {
 		return err
 	}
