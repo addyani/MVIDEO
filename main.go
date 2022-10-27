@@ -30,7 +30,13 @@ func main() {
 	// advertController := controllers.InitCartController(store)
 
 	user := app.Group("")
+	user.Get("/login", userController.Login)
 	user.Post("/login", userController.LoginPosted)
+	user.Get("/logout", userController.Logout)
+	user.Get("/dashboarduser", userController.DashboardUser)
+
+	//Untuk testing harus ada user register agar foreignKey relasi user to video dan advert bisa tersambung
+	user.Post("/register", userController.AddRegisteredUser)
 
 	// video := app.Group("/videos")
 
