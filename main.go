@@ -26,8 +26,11 @@ func main() {
 	models.InitDbModels()
 
 	userController := controllers.InitUserController(store)
-	// videoController := controllers.InitProductController(store)
-	// advertController := controllers.InitCartController(store)
+	// videoController := controllers.InitVideoController(store)
+	advertController := controllers.InitAdsController(store)
+
+	ads := app.Group("/ads")
+	ads.Get("/", advertController.Ads)
 
 	user := app.Group("")
 	user.Get("/login", userController.Login)
