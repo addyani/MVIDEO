@@ -59,9 +59,9 @@ func InitAdsController(s *session.Store) *AdsController {
 type Ads struct {
 	Code      int64  `json:"code"`
 	Id_Iklan  int64  `json:"idIklan"`
-	Id_User   int64  `json:"idUser`
-	ImagePath string `json:"image`
-	VideoPath string `json:"video`
+	Id_User   int64  `json:"idUser"`
+	ImagePath string `json:"image"`
+	VideoPath string `json:"video"`
 }
 
 var BASE_URL = "URL API M IKLAN"
