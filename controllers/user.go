@@ -25,6 +25,13 @@ func InitUserController(s *session.Store) *UserController {
 }
 
 // GET /login
+func (controller *UserController) ViewHome(c *fiber.Ctx) error {
+	return c.Render("myview", fiber.Map{
+		"Title": "Halaman Depan",
+	})
+}
+
+// GET /login
 func (controller *UserController) Login(c *fiber.Ctx) error {
 	return c.Render("login", fiber.Map{
 		"Title": "Login",
@@ -45,7 +52,7 @@ func (controller *UserController) LoginPostVerify(c *fiber.Ctx) error {
 		panic(err)
 	}
 	println(name)
-	sess.Set("name", names.Name)
+	sess.Set("name", "names.Name")
 	sess.Save()
 
 	val := sess.Get("name")
@@ -70,7 +77,7 @@ func (controller *UserController) Logout(c *fiber.Ctx) error {
 
 func (controller *UserController) AuthVerify(c *fiber.Ctx) error {
 	sess, _ := controller.store.Get(c)
-	val := sess.Get("username")
+	val := sess.Get("name")
 	if val != nil {
 		return c.Next()
 	}
