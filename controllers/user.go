@@ -1,16 +1,11 @@
 package controllers
 
 import (
-	"fmt"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"gorm.io/gorm"
 
 	"ilmudata/task1/database"
-	"ilmudata/task1/models"
-
-	"github.com/golang-jwt/jwt/v4"
 )
 
 type UserController struct {
@@ -40,26 +35,44 @@ func (controller *UserController) Login(c *fiber.Ctx) error {
 
 // post /login
 func (controller *UserController) LoginPostVerify(c *fiber.Ctx) error {
-	user := c.Locals("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	name := claims["name"].(string)
+	// user := c.Locals("user").(*jwt.Token)
+	// claims := user.Claims.(jwt.MapClaims)
+	// name := claims["name"].(string)
 
-	var names models.LoginForm
-	names.Name = name
+	// var names models.LoginForm
+	// names.Name = name
 
-	sess, err := controller.store.Get(c)
-	if err != nil {
-		panic(err)
-	}
-	println(name)
-	sess.Set("name", "names.Name")
-	sess.Save()
+	// sess, err := controller.store.Get(c)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// println(name)
+	// sess.Set("name", "names.Name")
+	// sess.Save()
 
-	val := sess.Get("name")
+	// val := sess.Get("name")
 
-	str := fmt.Sprintf("%v", val)
-	fmt.Println(str)
-	return c.SendString("Welcome " + str)
+	// str := fmt.Sprintf("%v", val)
+	// fmt.Println(str)
+
+	//deklarasi algoritma sign in
+	// tokenAlgo := jwt.NewWithClaims(jwt.SigningMethodHS256, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjY3MjI2MDIyLCJuYW1lIjoidXNlcjEifQ.IzusrDy1UP1Sz8wPRWFIC3uezjJC19FG6tR5ehnj1uQ")
+	// //signed token
+	// _, err := tokenAlgo.SignedString(config.JWT_KEY)
+	// if err != nil {
+	// 	response := map[string]string{"message": err.Error()}
+	// 	helper.ResponseJSON(w, http.StatusInternalServerError, response)
+	// 	return err
+	// }
+
+	// c.Cookie(&fiber.Cookie{
+	// 	Name:     "token",
+	// 	Path:     "/",
+	// 	Value:    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjY3MjI2MDIyLCJuYW1lIjoidXNlcjEifQ.IzusrDy1UP1Sz8wPRWFIC3uezjJC19FG6tR5ehnj1uQ",
+	// 	HTTPOnly: true,
+	// })
+
+	return c.SendString("Welcome ")
 }
 
 // /logout
