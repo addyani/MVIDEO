@@ -100,6 +100,22 @@ func (controller *VideoController) AddPostedVideo(c *fiber.Ctx) error {
 	return c.Redirect("/videos")	
 }
 
+// GET /videos/detailvideo/:id
+func (controller *VideoController) GetViewVideo(c *fiber.Ctx) error {
+	id := c.Params("id")
+	idn,_ := strconv.Atoi(id)
+
+
+	var videos models.Video
+	err := models.ReadVideoById(controller.Db, &videos, idn)
+	if err!=nil {
+		return c.SendStatus(500) // http 500 internal server error
+	}
+	return c.Render("viewvideo", fiber.Map{
+		"Title": "Detail Video",
+		"Videos": videos,
+}
+			
 // GET /videos/editvideo/:id
 func (controller *VideoController) EditVideo(c *fiber.Ctx) error {
 	id := c.Params("id")
@@ -182,22 +198,4 @@ func (controller *VideoController) DeleteVideo(c *fiber.Ctx) error {
 	var videos models.Video
 	models.DeleteVideoById(controller.Db, &videos, idn)
 	return c.Redirect("/videos")	
-}
-
-
-// GET /videos/detail/xxx
-func (controller *VideoController) GetViewVideo(c *fiber.Ctx) error {
-	id := c.Params("id")
-	idn,_ := strconv.Atoi(id)
-
-
-	var videos []models.Video
-	err := models.ReadVideo2ById(controller.Db, &videos, idn)
-	if err!=nil {
-		return c.SendStatus(500) // http 500 internal server error
-	}
-	return c.Render("viewvideo", fiber.Map{
-		"Title": "Detail Video",
-		"Videos": videos,
-	})
 }
