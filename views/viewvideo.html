@@ -5,16 +5,21 @@
 			<div class="card-body">
 				<div>
                     <center>
-                        <p>
-                            <video autoplay width="630" height="100%" controls>
-                                <source src="/public/Video/{{.Videos.Video}}">
-                            </video>
-                        </p>
+                        <video autoplay width="580" height="80%"   controls>
+                            <!-- Tolong Dicek kembali ke databasenya -->
+                            <!-- <source src="/public/iklan/{{.Iklan.Id}}"> -->
+                            <source src="/public/iklan/{{.Iklan.Video}}">
+                            <!-- <source src="/public/iklan/{{.Iklan.Image}}"> -->
+                        </video>
+                        <video  width="630" height="100%" volume="50%"controls poster="/public/iklan/{{.Iklan.Image}}">
+                            <source src="/public/Video/{{ .Videos.Video}}">
+                        </video>      
                     </center>
 					<h1>{{.Videos.Title}}</h1>
-                    Views . 25 Tanggal Upload
+                    Views {{.Advert.View}} 25 Tanggal Upload
                     <hr size="10px">
-                    <b><p class="card-text">Nama Creator</p></b>
+                    <!-- tolong dicek kembali ke database nya -->
+                    <b><p class="card-text">{{.User.Username}}</p></b>
 					{{.Videos.Description}}
 				</div>
 				<div>
