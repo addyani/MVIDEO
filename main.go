@@ -7,6 +7,8 @@ import (
 
 	"ilmudata/task1/controllers"
 	"ilmudata/task1/models"
+
+	jwtware "github.com/gofiber/jwt/v3"
 )
 
 func main() {
@@ -21,6 +23,11 @@ func main() {
 		BodyLimit: 200 * 1024 * 1024,
 	})
 
+	// JWT Middleware
+	app.Use(jwtware.New(jwtware.Config{
+		SigningKey: []byte("mysecretpassword"),
+	}))
+
 	// static
 	app.Static("/public", "./public")
 	models.InitDbModels()
@@ -34,12 +41,13 @@ func main() {
 
 	user := app.Group("")
 	user.Get("/login", userController.Login)
-	user.Post("/login", userController.LoginPosted)
+	user.Get("/loginverify", userController.LoginPostVerify)
 	user.Get("/logout", userController.Logout)
-	user.Get("/dashboarduser", userController.DashboardUser)
+	//userController.AuthVerify for auth
+	user.Get("/dashboarduser", userController.AuthVerify, userController.DashboardUser)
 
 	//Untuk testing harus ada user register agar foreignKey relasi user to video dan advert bisa tersambung
-	user.Post("/register", userController.AddRegisteredUser)
+	// user.Post("/register", userController.AddRegisteredUser)
 
 	video := app.Group("/videos")
 	// video := app.Group("/videos")
@@ -50,7 +58,7 @@ func main() {
 	video.Post("/editvideo/:id", videoController.EditPostedVideo)
 	video.Get("/deletevideo/:id", videoController.DeleteVideo)
 	video.Get("/detailvideo/:id", videoController.GetViewVideo)
-	
+
 	// advert := app.Group("/advert")
 
 	app.Listen(":3001")

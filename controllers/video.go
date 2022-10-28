@@ -1,8 +1,9 @@
 package controllers //controler akan mengambil model
 
 import (
-	"strconv"
 	"fmt"
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"gorm.io/gorm"
@@ -11,7 +12,7 @@ import (
 	"ilmudata/task1/models"
 )
 
-type VideoController struct { 
+type VideoController struct {
 	Db    *gorm.DB
 	store *session.Store
 }
@@ -28,11 +29,11 @@ func InitVideoController(s *session.Store) *VideoController {
 func (controller *VideoController) IndexVideo(c *fiber.Ctx) error {
 	var videos []models.Video
 	err := models.ReadVideo(controller.Db, &videos)
-	if err!=nil {
+	if err != nil {
 		return c.SendStatus(500) // http 500 internal server error
 	}
 	return c.Render("homevideo", fiber.Map{
-		"Title": "Dasboard",
+		"Title":  "Dasboard",
 		"Videos": videos,
 	})
 
@@ -48,7 +49,7 @@ func (controller *VideoController) AddVideo(c *fiber.Ctx) error {
 // POST /videos/create
 func (controller *VideoController) AddPostedVideo(c *fiber.Ctx) error {
 	var myform models.Video
-	
+
 	//upload Tumb
 	file, errFile := c.FormFile("tumb")
 	if errFile != nil {
@@ -58,9 +59,9 @@ func (controller *VideoController) AddPostedVideo(c *fiber.Ctx) error {
 	if file != nil {
 
 		errSaveFile := c.SaveFile(file, fmt.Sprintf("./public/Tumb/%s", filename))
-			if errSaveFile != nil {
-				fmt.Println("404")
-			}
+		if errSaveFile != nil {
+			fmt.Println("404")
+		}
 	} else {
 		fmt.Println("404")
 	}
@@ -77,9 +78,9 @@ func (controller *VideoController) AddPostedVideo(c *fiber.Ctx) error {
 	var filenamee string = filee.Filename
 	if filee != nil {
 		errSaveFilee := c.SaveFile(filee, fmt.Sprintf("./public/Video/%s", filenamee))
-			if errSaveFilee != nil {
-				fmt.Println("404")
-			}
+		if errSaveFilee != nil {
+			fmt.Println("404")
+		}
 	} else {
 		fmt.Println("404")
 	}
@@ -93,42 +94,41 @@ func (controller *VideoController) AddPostedVideo(c *fiber.Ctx) error {
 
 	// save product
 	err := models.CreateVideo(controller.Db, &myform)
-	if err!=nil {
+	if err != nil {
 		return c.Redirect("/videos")
 	}
 	// if succeed
-	return c.Redirect("/videos")	
+	return c.Redirect("/videos")
 }
 
 // GET /videos/detailvideo/:id
 func (controller *VideoController) GetViewVideo(c *fiber.Ctx) error {
 	id := c.Params("id")
-	idn,_ := strconv.Atoi(id)
-
+	idn, _ := strconv.Atoi(id)
 
 	var videos models.Video
 	err := models.ReadVideoById(controller.Db, &videos, idn)
-	if err!=nil {
+	if err != nil {
 		return c.SendStatus(500) // http 500 internal server error
 	}
 	return c.Render("viewvideo", fiber.Map{
-		"Title": "Detail Video",
+		"Title":  "Detail Video",
 		"Videos": videos,
+	})
 }
-			
+
 // GET /videos/editvideo/:id
 func (controller *VideoController) EditVideo(c *fiber.Ctx) error {
 	id := c.Params("id")
-	idn,_ := strconv.Atoi(id)
-
+	idn, _ := strconv.Atoi(id)
 
 	var videos models.Video
 	err := models.ReadVideoById(controller.Db, &videos, idn)
-	if err!=nil {
+	if err != nil {
 		return c.SendStatus(500) // http 500 internal server error
 	}
 	return c.Render("editvideo", fiber.Map{
-		"Title": "Edit Video",
+		"Title":  "Edit Video",
 		"Videos": videos,
 	})
 }
@@ -157,9 +157,9 @@ func (controller *VideoController) EditPostedVideo(c *fiber.Ctx) error {
 	if file != nil {
 
 		errSaveFile := c.SaveFile(file, fmt.Sprintf("./public/Tumb/%s", filename))
-			if errSaveFile != nil {
-				fmt.Println("404")
-			}
+		if errSaveFile != nil {
+			fmt.Println("404")
+		}
 	} else {
 		fmt.Println("404")
 	}
@@ -172,9 +172,9 @@ func (controller *VideoController) EditPostedVideo(c *fiber.Ctx) error {
 	var filenamee string = filee.Filename
 	if filee != nil {
 		errSaveFilee := c.SaveFile(filee, fmt.Sprintf("./public/Video/%s", filenamee))
-			if errSaveFilee != nil {
-				fmt.Println("404")
-			}
+		if errSaveFilee != nil {
+			fmt.Println("404")
+		}
 	} else {
 		fmt.Println("404")
 	}
@@ -193,9 +193,9 @@ func (controller *VideoController) EditPostedVideo(c *fiber.Ctx) error {
 // GET /videos/deletevideo/:id
 func (controller *VideoController) DeleteVideo(c *fiber.Ctx) error {
 	id := c.Params("id")
-	idn,_ := strconv.Atoi(id)
+	idn, _ := strconv.Atoi(id)
 
 	var videos models.Video
 	models.DeleteVideoById(controller.Db, &videos, idn)
-	return c.Redirect("/videos")	
+	return c.Redirect("/videos")
 }

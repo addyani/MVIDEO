@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"strconv"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -10,7 +10,7 @@ import (
 	"ilmudata/task1/database"
 	"ilmudata/task1/models"
 
-	"golang.org/x/crypto/bcrypt"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 type UserController struct {
@@ -32,36 +32,27 @@ func (controller *UserController) Login(c *fiber.Ctx) error {
 }
 
 // post /login
-func (controller *UserController) LoginPosted(c *fiber.Ctx) error {
+func (controller *UserController) LoginPostVerify(c *fiber.Ctx) error {
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	name := claims["name"].(string)
+
+	var names models.LoginForm
+	names.Name = name
+
 	sess, err := controller.store.Get(c)
 	if err != nil {
 		panic(err)
 	}
-	var user models.User
-	var myform models.LoginForm
+	println(name)
+	sess.Set("name", names.Name)
+	sess.Save()
 
-	if err := c.BodyParser(&myform); err != nil {
-		return c.Redirect("/login")
-	}
+	val := sess.Get("name")
 
-	// Find user
-	errs := models.FindUserByUsername(controller.Db, &user, myform.Username)
-	if errs != nil {
-		return c.Redirect("/login") // Unsuccessful login (cannot find user)
-	}
-
-	// Compare password
-	compare := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(myform.Password))
-	if compare == nil { // compare == nil artinya hasil compare di atas true
-		sess.Set("username", user.Username)
-		sess.Set("userId", user.Id)
-		sess.Save()
-
-		idn := strconv.FormatUint(uint64(user.Id), 10)
-		return c.Redirect("/products/" + idn)
-	}
-
-	return c.Redirect("/login")
+	str := fmt.Sprintf("%v", val)
+	fmt.Println(str)
+	return c.SendString("Welcome " + str)
 }
 
 // /logout
@@ -73,7 +64,7 @@ func (controller *UserController) Logout(c *fiber.Ctx) error {
 	}
 	sess.Destroy()
 	return c.Render("login", fiber.Map{
-		"Title": "Login",
+		"Title": "Telah Logout",
 	})
 }
 
@@ -90,35 +81,4 @@ func (controller *UserController) DashboardUser(c *fiber.Ctx) error {
 	return c.Render("dashboarduser", fiber.Map{
 		"Title": "Dashboard User",
 	})
-}
-
-// POST /register
-func (controller *UserController) AddRegisteredUser(c *fiber.Ctx) error {
-	var user models.User
-
-	if err := c.BodyParser(&user); err != nil {
-		return c.SendStatus(400) // Bad Request, RegisterForm is not complete
-	}
-
-	// Hash password
-	bytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
-	sHash := string(bytes)
-
-	// Add hash password to db user password
-	user.Password = sHash
-
-	// save user
-	err := models.CreateUser(controller.Db, &user)
-	if err != nil {
-		return c.SendStatus(500) // Server error, gagal menyimpan user
-	}
-
-	// Find user
-	errs := models.FindUserByUsername(controller.Db, &user, user.Username)
-	if errs != nil {
-		return c.SendStatus(500) // Server error, gagal menyimpan user
-	}
-
-	// if succeed
-	return c.Redirect("/login")
 }
