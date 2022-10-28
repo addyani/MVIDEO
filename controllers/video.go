@@ -200,17 +200,3 @@ func (controller *VideoController) DeleteVideo(c *fiber.Ctx) error {
 	return c.Redirect("/videos")
 }
 
-// get videos/created/:id
-func (controller *VideoController) GetDateVideo(c *fiber.Ctx) error {
-	id := c.Params("id")
-	idn, _ := strconv.Atoi(id)
-
-	var video models.Video
-	err := models.ReadVideoById(controller.Db, &videos, idn)
-	if err != nil {
-		return c.SendStatus(500) // http 500 internal server error
-	}
-	return c.JSON(fiber.Map{
-		"Tanggal Upload Video": video.CreatedAt,
-	})
-}
