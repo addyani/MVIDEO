@@ -30,7 +30,7 @@ func main() {
 	advertController := controllers.InitAdsController(store)
 
 	ads := app.Group("/ads")
-	ads.Get("/", advertController.GetAds)
+	ads.Get("/", advertController.Ads)
 
 	user := app.Group("")
 	user.Get("/login", userController.Login)
