@@ -34,7 +34,7 @@ func CreateVideo(db *gorm.DB, newVideo *Video) (err error) {
 	return nil
 }
 
-// Untuk Membuat atau menambahkan Data Video
+// Untuk Menamplikan Data Video Berdasarkan Id
 func ReadVideoById(db *gorm.DB, videos *Video, id int)(err error) {
 	err = db.Where("id=?", id).First(videos).Error
 	if err != nil {
@@ -54,13 +54,5 @@ func UpdateVideo(db *gorm.DB, videos *Video)(err error) {
 func DeleteVideoById(db *gorm.DB, videos *Video, id int)(err error) {
 	db.Where("id=?", id).Delete(videos)
 	
-	return nil
-}
-
-func ReadVideo2ById(db *gorm.DB, viewVideo *[]Video, id int)(err error) {
-	err = db.Where("id=?", id).First(viewVideo).Error
-	if err != nil {
-		return err
-	}
 	return nil
 }
