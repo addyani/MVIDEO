@@ -49,8 +49,7 @@ func main() {
 	video.Get("/editvideo/:id", videoController.EditVideo)
 	video.Post("/editvideo/:id", videoController.EditPostedVideo)
 	video.Get("/deletevideo/:id", videoController.DeleteVideo)
-	//thisone
-	video.Get("/detail/:id", videoController.GetViewVideo)
+	video.Get("/detailvideo/:id", videoController.GetViewVideo)
 	
 	// advert := app.Group("/advert")
 
