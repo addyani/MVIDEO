@@ -8,10 +8,10 @@
                         <video autoplay width="580" height="80%"   controls>
                             <!-- Tolong Dicek kembali ke databasenya -->
                             <!-- <source src="/public/iklan/{{.Iklan.Id}}"> -->
-                            <source src="/public/iklan/{{.Iklan.Video}}">
+                            <source src="localhost:8080/public/iklan/{{.Iklan.Video}}">
                             <!-- <source src="/public/iklan/{{.Iklan.Image}}"> -->
                         </video>
-                        <video  width="630" height="100%" volume="50%"controls poster="/public/iklan/{{.Iklan.Image}}">
+                        <video  width="630" height="100%" volume="50%"controls poster="localhost:8080/public/iklan/{{.Iklan.Image}}">
                             <source src="/public/Video/{{ .Videos.Video}}">
                         </video>      
                     </center>
