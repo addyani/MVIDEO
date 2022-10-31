@@ -5,13 +5,13 @@
 			<div class="card-body">
 				<div>
                     <center>
-                        <video autoplay width="580" height="80%"   controls>
+                        <video autoplay width="630" volume="50%" controls id="iklan">
                             <!-- Tolong Dicek kembali ke databasenya -->
                             <!-- <source src="/public/iklan/{{.Iklan.Id}}"> -->
                             <source src="http://localhost:8080/public/iklan/videos/y2mate.com - VIDEO IKLAN PROMOSI 10 DETIK  CUMA DENGAN 1 KALI SHOOT  VIDEO IKLAN PRODUK BY FAISOL ALWI_480p.mp4">
                             <!-- <source src="/public/iklan/{{.Iklan.Image}}"> -->
                         </video>
-                        <video  width="630" height="100%" volume="50%"controls poster="http://localhost:8080/public/iklan/images/gilus.jpeg">
+                        <video autoplay width="630" volume="50%"controls id="mainvid" poster="http://localhost:8080/public/iklan/images/gilus.jpeg" style="display: none">
                             <source src="/public/Video/{{ .Videos.Video}}">
                         </video>      
                     </center>
@@ -37,4 +37,11 @@
 		</div>
 	</div>
 </div>
+<script>
+		var ads = document.getElementById("iklan");
+		ads.onended = function() {
+			document.getElementById("iklan").style.display = 'none';
+			document.getElementById("mainvid").style.display = 'block';
+		};
+</script>
 {{template "partials/bawah" .}}
