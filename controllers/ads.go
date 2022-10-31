@@ -3,10 +3,9 @@ package controllers
 import (
 	"encoding/json"
 	"ilmudata/task1/database"
+
 	"ilmudata/task1/models"
 	"io/ioutil"
-
-	// "io/ioutil"
 
 	"net/http"
 	"strconv"
@@ -29,11 +28,12 @@ func InitAdsController(s *session.Store) *AdsController {
 
 type Ads struct {
 	Code      int64  `json:"code"`
-	Id_Iklan  int64  `json:"idIklan"`
-	Id_User   int64  `json:"idUser"`
+	Id_Iklan  int64  `json:"id_iklan"`
+	Id_User   int64  `json:"id_user"`
 	ImagePath string `json:"image_path"`
 	VideoPath string `json:"video_path"`
 }
+
 
 func (controllers *AdsController) Ads(c *fiber.Ctx) error {
 	resd, _ := http.Get("http://127.0.0.1:3000/api/products")
@@ -41,6 +41,7 @@ func (controllers *AdsController) Ads(c *fiber.Ctx) error {
 	var api []Ads
 	json.Unmarshal(data, &api)
 	veri, _ := json.Marshal(api)
+
 	// return c.Render("ads", fiber.Map{
 	// 	"message": "Data Ads",
 	// 	"data":    veri,
@@ -51,6 +52,7 @@ func (controllers *AdsController) Ads(c *fiber.Ctx) error {
 		"data":    formatData,
 	})
 }
+
 
 // login dahulu sebelum melihat tabel view iklan
 func (controller *AdsController) GetAds(c *fiber.Ctx) error {
