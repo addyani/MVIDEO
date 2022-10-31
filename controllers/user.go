@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
+	"github.com/golang-jwt/jwt/v4"
 	"gorm.io/gorm"
 
 	"ilmudata/task1/database"
@@ -35,9 +36,6 @@ func (controller *UserController) Login(c *fiber.Ctx) error {
 
 // post /login
 func (controller *UserController) LoginPostVerify(c *fiber.Ctx) error {
-	// user := c.Locals("user").(*jwt.Token)
-	// claims := user.Claims.(jwt.MapClaims)
-	// name := claims["name"].(string)
 
 	// var names models.LoginForm
 	// names.Name = name
@@ -72,7 +70,7 @@ func (controller *UserController) LoginPostVerify(c *fiber.Ctx) error {
 	// 	HTTPOnly: true,
 	// })
 
-	return c.SendString("Welcome ")
+	return c.SendString("Add JWT To Cookie")
 }
 
 // /logout
@@ -98,7 +96,12 @@ func (controller *UserController) AuthVerify(c *fiber.Ctx) error {
 }
 
 func (controller *UserController) DashboardUser(c *fiber.Ctx) error {
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	name := claims["name"].(string)
+
 	return c.Render("dashboarduser", fiber.Map{
 		"Title": "Dashboard User",
+		"Name":  name,
 	})
 }
