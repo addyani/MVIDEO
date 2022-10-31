@@ -30,6 +30,7 @@ func main() {
 	userController := controllers.InitUserController(store)
 	videoController := controllers.InitVideoController(store)
 	advertController := controllers.InitAdsController(store)
+	videoApiController := controllers.InitVideoApiController(store)
 
 	app.Get("/", userController.ViewHome)
 
@@ -58,6 +59,14 @@ func main() {
 	video.Post("/editvideo/:id", videoController.EditPostedVideo)
 	video.Get("/deletevideo/:id", videoController.DeleteVideo)
 	video.Get("/detailvideo/:id", videoController.GetViewVideo)
+
+	//Api Video
+	videoApi := app.Group("/apivideos")
+	videoApi.Get("/", videoApiController.IndexVideo)
+	videoApi.Post("/create", videoApiController.AddPostedVideo)
+	videoApi.Put("/editvideo/:id", videoApiController.EditPostedVideo)
+	videoApi.Delete("/deletevideo/:id", videoApiController.DeleteVideo)
+	videoApi.Get("/detailvideo/:id", videoApiController.GetViewVideo)
 
 	// advert := app.Group("/advert")
 
