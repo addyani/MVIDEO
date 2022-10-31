@@ -37,7 +37,7 @@ func main() {
 	ads := app.Group("/ads")
 	ads.Get("/", advertController.Ads)
 	ads.Get("/viewiklan", advertController.GetAds)
-	
+
 	user := app.Group("")
 	user.Get("/login", userController.Login)
 	user.Post("/loginverify", userController.LoginPostVerify)

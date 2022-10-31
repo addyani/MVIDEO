@@ -199,3 +199,4 @@ func (controller *VideoController) DeleteVideo(c *fiber.Ctx) error {
 	models.DeleteVideoById(controller.Db, &videos, idn)
 	return c.Redirect("/videos")
 }
+
