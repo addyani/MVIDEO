@@ -15,9 +15,10 @@ package models
 // }
 
 type LoginForm struct {
-	Username string `form:"username" json:"username" validate:"required"`
-	Password string `form:"password" json:"password" validate:"required"`
-	Name     string `form:"name" json:"name" validate:"required"`
+	Username string `form:"username" json:"username"`
+	Password string `form:"password" json:"password"`
+	Name     string `form:"name" json:"name"`
+	Token    string `form:"token" json:"token"`
 }
 
 // func CreateUser(db *gorm.DB, newUser *User) (err error) {

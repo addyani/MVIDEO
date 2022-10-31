@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 
 	"ilmudata/task1/database"
+	"ilmudata/task1/models"
 )
 
 type UserController struct {
@@ -69,6 +70,11 @@ func (controller *UserController) LoginPostVerify(c *fiber.Ctx) error {
 	// 	Value:    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjY3MjI2MDIyLCJuYW1lIjoidXNlcjEifQ.IzusrDy1UP1Sz8wPRWFIC3uezjJC19FG6tR5ehnj1uQ",
 	// 	HTTPOnly: true,
 	// })
+
+	var myform models.LoginForm
+	if err := c.BodyParser(&myform.Token); err != nil {
+		return c.SendString("Not Token Detect")
+	}
 
 	return c.SendString("Add JWT To Cookie")
 }
