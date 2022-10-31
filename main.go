@@ -7,6 +7,8 @@ import (
 
 	"ilmudata/task1/controllers"
 	"ilmudata/task1/models"
+
+	jwtware "github.com/gofiber/jwt/v3"
 )
 
 func main() {
@@ -26,22 +28,45 @@ func main() {
 	models.InitDbModels()
 
 	userController := controllers.InitUserController(store)
-	// videoController := controllers.InitVideoController(store)
+	videoController := controllers.InitVideoController(store)
 	advertController := controllers.InitAdsController(store)
+	videoApiController := controllers.InitVideoApiController(store)
+
+	app.Get("/", userController.ViewHome)
 
 	ads := app.Group("/ads")
 	ads.Get("/", advertController.Ads)
+	ads.Get("/viewiklan", advertController.GetAds)
 
 	user := app.Group("")
 	user.Get("/login", userController.Login)
-	user.Post("/login", userController.LoginPosted)
+	user.Post("/loginverify", userController.LoginPostVerify)
 	user.Get("/logout", userController.Logout)
-	user.Get("/dashboarduser", userController.DashboardUser)
 
-	//Untuk testing harus ada user register agar foreignKey relasi user to video dan advert bisa tersambung
-	user.Post("/register", userController.AddRegisteredUser)
+	//Testing JWT
+	data := app.Group("/data")
+	data.Use(jwtware.New(jwtware.Config{
+		SigningKey: []byte("mysecretpassword"),
+	}))
+	data.Get("/dashboarduser", userController.DashboardUser)
 
+	video := app.Group("/videos")
 	// video := app.Group("/videos")
+	video.Get("/", videoController.IndexVideo)
+	video.Get("/create", videoController.AddVideo)
+	video.Post("/create", videoController.AddPostedVideo)
+	video.Get("/editvideo/:id", videoController.EditVideo)
+	video.Post("/editvideo/:id", videoController.EditPostedVideo)
+	video.Get("/deletevideo/:id", videoController.DeleteVideo)
+	video.Get("/detailvideo/:id", videoController.GetViewVideo)
+
+	//Api Video
+	videoApi := app.Group("/apivideos")
+	videoApi.Get("/", videoApiController.IndexVideo)
+	videoApi.Post("/create", videoApiController.AddPostedVideo)
+	videoApi.Put("/editvideo/:id", videoApiController.EditPostedVideo)
+	videoApi.Delete("/deletevideo/:id", videoApiController.DeleteVideo)
+	videoApi.Get("/detailvideo/:id", videoApiController.GetViewVideo)
 
 	// advert := app.Group("/advert")
 

@@ -19,9 +19,9 @@ type DbModels struct {
 func InitDbModels() *DbModels {
 	db := database.InitDb()
 	// gorm
-	db.AutoMigrate(&User{})
+	// db.AutoMigrate(&User{})
 	db.AutoMigrate(&Video{})
-	db.AutoMigrate(&Advert{})
+	// db.AutoMigrate(&Advert{})
 
 	return &DbModels{Db: db}
 }
