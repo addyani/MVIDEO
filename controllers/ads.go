@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"encoding/json"
+	// "encoding/json"
 	"ilmudata/task1/database"
 
 	"ilmudata/task1/models"
-	"io/ioutil"
+	// "io/ioutil"
 
-	"net/http"
+	// "net/http"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -26,31 +26,39 @@ func InitAdsController(s *session.Store) *AdsController {
 	return &AdsController{Db: db, store: s}
 }
 
-type Ads struct {
-	Code      int64  `json:"code"`
-	Id_Iklan  int64  `json:"id_iklan"`
-	Id_User   int64  `json:"id_user"`
-	ImagePath string `json:"image_path"`
-	VideoPath string `json:"video_path"`
+type  Ads struct {
+	Id          int    `json:"id"`
+	Name        string `json:"name"`
+	Image       string `json:"image"`
+	Video       string `json:"video"`
+	Description string `json:"description"`
+}
+
+type Produk struct {
+	gorm.Model
+	Id       int     `json:"id"`
+	Name     string  `json:"name"`
+	Quantity int     `json:"quantity"`
+	Price    float32 `json:"price"`
 }
 
 
 func (controllers *AdsController) Ads(c *fiber.Ctx) error {
-	resd, _ := http.Get("http://127.0.0.1:3000/api/products")
-	data, _ := ioutil.ReadAll(resd.Body)
-	var api []Ads
-	json.Unmarshal(data, &api)
-	veri, _ := json.Marshal(api)
-
+	// resd, _ := http.Get("http://127.0.0.1:8080/admin/iklan/api")
+	// data, _ := ioutil.ReadAll(resd.Body)
+	// var api []Ads
+	// json.Unmarshal(data, &api)
+	// veri, _ := json.Marshal(api)
+	return c.Redirect("http://127.0.0.1:8080/admin/iklan/api")
 	// return c.Render("ads", fiber.Map{
 	// 	"message": "Data Ads",
 	// 	"data":    veri,
 	// })
-	formatData := c.Format(veri)
-	return c.Render("ads", fiber.Map{
-		"message": "Data Iklan",
-		"data":    formatData,
-	})
+	// formatData := c.Format(veri)
+	// return c.Render("ads", fiber.Map{
+	// 	"message": "Data Iklan",
+	// 	"data":    formatData,
+	// })
 }
 
 
